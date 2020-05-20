@@ -5,14 +5,13 @@ import os
 import sys
 import subprocess
 from get_spectrogram import runScript as get_spectrogram
-from classification import runScript as get_svm_classification
 from classification_cnn import runScript as get_cnn_classification
 from acousticIndices import getAcousticIndices as get_acoustic_indices
 from analysis_driver import run_driver
 import traceback
 import random
 import shutil
-
+from waitress import serve
 
 UPLOAD_FOLDER = 'instance/upload/'
 ALLOWED_EXTENSIONS = {'wav'}
@@ -22,7 +21,6 @@ app.config["DEBUG"] = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
-DEBUG_FLAG = True
 '''
 ###------------------------------------------------------###
 App Routing: '/'
@@ -57,10 +55,10 @@ and saves the files one at a time to the folder 'instance/upload'
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file():
 
-   # Check for user folder.
-   getUserFolder()
+    # Check for user folder
+    getUserFolder()
 
-   if request.method == 'POST':
+    if request.method == 'POST':
         # Request.Files comes in a immutable multi-dictionary.
         # MutableList uses a method to convert the imm. multi-dict to a mutable list.
         mutableList = request.files.copy()
@@ -97,10 +95,22 @@ def didFileUpload():
         return "False"
 
 
-
+'''
+###------------------------------------------------------###
+App Routing: '/removeFile'
+Function: removeFile()
+Caller: App.js
+###------------------------------------------------------###
+Removes a file from the list of files that will be uploaded.
+###------------------------------------------------------###
+'''
 @app.route('/removeFile', methods = ['POST'])
 def removeFile():
    file = request.get_json()
+   
+   # Check for user folder.
+   getUserFolder()
+   
    if(file['file'] not in os.listdir('instance/upload/user'+session['id'])):
         return redirect('', 204)
    else:
@@ -119,6 +129,10 @@ def getUserFolder():
         if('id' not in session):
             session['id'] = 0
 
+        # Create 'instance/upload/' folder if not present
+        if(os.path.isdir('instance/upload/') == False):
+            os.makedirs('instance/upload/')
+
         if('user' + str(session['id']) in os.listdir('instance/upload/')):
             for file in os.listdir('instance/upload/user' + session['id']):
                 os.remove('instance/upload/user' + session['id']+'/'+file)
@@ -129,11 +143,8 @@ def getUserFolder():
             while('user'+ personID in os.listdir('instance/upload/')):
                  personID = str(random.randint(0, 999999999999))
 
-
-
             if('user'+ str(session['id']) not in os.listdir('instance/upload/')):
                 session['id'] =  personID
-
 
             if not os.path.isdir('instance/upload/user'+session['id']):
                 os.makedirs('instance/upload/user'+session['id'])
@@ -166,8 +177,18 @@ def run_analysis():
 
         return result
     except Exception as e:
-        return str(e)
+        track = traceback.format_exc()
+        print(track)
 
+'''
+###------------------------------------------------------###
+App Routing: '/removeUserFolder'
+Function: closeUserFolder()
+Caller: App.js
+###------------------------------------------------------###
+Removes the users folder along with any files uploaded.
+###------------------------------------------------------###
+'''
 @app.route('/removeUserFolder', methods=['GET', 'POST'])
 def closeUserFolder():
     if os.path.isdir('instance/upload/user'+session['id']):
@@ -175,8 +196,10 @@ def closeUserFolder():
     return redirect('', 204)
 
 
+# For running without waitress
+# app.run(debug=True)
 
-#print('Starting Flask!')
-app.run(debug=True)
+# For serving app through waitress
+serve(app, host='0.0.0.0')
 
 

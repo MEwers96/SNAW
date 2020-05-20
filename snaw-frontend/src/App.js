@@ -1,32 +1,26 @@
 import React from 'react';
-import logo from './img/logo_small.png';
 import './App.css';
 import AnalyzeButton from './components/AnalyzeButton';
 import ApplicationBar from "./components/ApplicationBar";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import Footer from "./components/Footer";
 import Button from "@material-ui/core/Button";
 import {createMuiTheme, MuiThemeProvider, Typography} from "@material-ui/core";
-import CardMedia from "@material-ui/core/CardMedia";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper"
-import { withStyles} from "@material-ui/core/styles";
 import Divider from '@material-ui/core/Divider'
 import Box from '@material-ui/core/Box'
 import loading from './img/loading.gif'
 import PublishIcon from '@material-ui/icons/Publish';
-import AssessmentIcon from '@material-ui/icons/Assessment';
 import AddIcon from '@material-ui/icons/Add'
 import Tooltip from "@material-ui/core/Tooltip";
 import InfoIcon from '@material-ui/icons/Info';
 import DeleteIcon from '@material-ui/icons/Delete';
-import back_img from './img/garden-pond-lakes-winery-581729.jpg'
-import { shadows } from '@material-ui/system';
 import $ from 'jquery';
 import LinearProgress from "@material-ui/core/LinearProgress";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Link from "@material-ui/core/Link";
+import { Link } from 'react-router-dom';
 
 const customtheme = createMuiTheme({
     palette : {
@@ -38,6 +32,7 @@ const customtheme = createMuiTheme({
     }
 })
 
+// Configure toast (notifications on top-right corner of web application)
 toast.configure()
 
 class App extends React.Component {
@@ -64,7 +59,6 @@ class App extends React.Component {
   }
 
   fileSelectedHandler = event => {
-      console.log(this.state.uploadAudioFilesButton);
       event.preventDefault();
       this.setState({percentage: 0});
 
@@ -78,7 +72,8 @@ class App extends React.Component {
            this.setState({selectedFile: this.state.selectedFile, submitAudioFilesButton: false, filesInserted: false });
           }
 
-          console.log(this.state.selectedFile);
+        // Displays the data for each file selected in the console
+        // console.log(this.state.selectedFile);
     }
 
 
@@ -129,7 +124,6 @@ class App extends React.Component {
          formData.append('file', this.state.selectedFile[i]);
      }
      this.setState({loadingBarVisible: false, submitAudioFilesButton: true, deleteButton: true})
-     console.log(formData)
      var percent = 0;
 
      $.ajax({
@@ -162,7 +156,6 @@ class App extends React.Component {
      })
   }
 
-
   getFileByteSize(size){
       let result = 0;
       if(size >= 1024 && size < 1048576){
@@ -172,12 +165,10 @@ class App extends React.Component {
       else if(size >= 1048576 && size < 1073741824){
           result = Number.parseFloat(String(size/1048576)).toFixed(2);
           return String(result + " MB")
-
       }
       else if(size >= 1073741824){
           result = Number.parseFloat(String(size/1073741824)).toFixed(2);
           return String(result + " GB")
-
       }
       else{
           return 0;
@@ -185,11 +176,9 @@ class App extends React.Component {
   }
 
   removeFile(file, filename){
-
-      console.log(file);
       let currentFiles = this.state.selectedFile;
       let newFileList = [];
-      console.log("REMOVING FILE....");
+      console.log("REMOVING FILE..");
       for(let i = 0; i < currentFiles.length; i++){
           if(file == currentFiles[i]){
               continue
@@ -301,6 +290,7 @@ class App extends React.Component {
                             <Grid item>
                                 <br/>
                                 {<AnalyzeButton bool={this.state.filesInserted}/>}
+                                <br/>
                             </Grid>
                             <Grid item>
                                 <Divider middle/><br/>
@@ -320,13 +310,7 @@ class App extends React.Component {
                     </MuiThemeProvider>
                 </Container>
             </body>
-          <footer>
-              <Container>
-                <br/><br/>
-                <Typography variant='subtitle1' style={{marginLeft: 'auto', marginRight: 'auto'}}>Created by NAU Capstone Team IntelliChirp · <a href="https://www.ceias.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/">Visit project website</a> · <a href="https://soundscapes2landscapes.org/">Visit our sponsor</a></Typography>
-                <br/>
-              </Container>
-          </footer>
+            <Footer />
       </div>
     );
   }

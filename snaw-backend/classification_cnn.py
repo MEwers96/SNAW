@@ -1,10 +1,4 @@
 from keras.models import load_model
-import keras
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D, LSTM, Activation
-from keras.utils import to_categorical
-import wandb
-from wandb.keras import WandbCallback
 import matplotlib.pyplot as plt
 import sklearn.metrics as metrics
 import librosa
@@ -13,40 +7,34 @@ import traceback
 import os
 import json
 
-DEBUG_FLAG = True
+DEBUG_FLAG = False
 PREDICTION_VERBOSE = False
-
-def get_category( label ) :
-    switch
 
 def get_category( label ):
     return {
-        'a': 1,
-        'b': 2,
         "AAT" : "Air  Traffic",
-        "AHV" : "N/A",
+        "AHV" : "Human Voice",
+        "AMU" : "Music",
         "AMA" : "Machinery",
         "ART" : "Rail Traffic",
         "ASI" : "Siren",
         "AVH" : "Vehicle Horn",
         "AVT" : "Vehicle Traffic",
-        "BRA" : "N/A",
+        "AVB" : "Vehicle Braking",
         "BAM" : "Amphibian",
         "BBI" : "Bird",
         "BMA" : "Mammal",
         "BIN" : "Insect",
-        "GOC" : "N/A",
+        "GOC" : "Ocean",
         "GRA" : "Rain",
-        "GST" : "N/A",
+        "GST" : "Stream",
         "GWG" : "Wind Gust",
         "GWC" : "Wind Constant",
         "OPI" : "Physical Interference",
         "OQU" : "Quiet"
-    }.get(label, "N/A")
+    }.get(label, "Label Missing")
 
 def classify_file( audio_file, all_models ) :
-    # load the models
-
 
     all_labels = [ ["AAT", "AHV", "AMA", "ART", "ASI", "AVH", "AVT"],
                    ["BRA", "BAM", "BBI", "BMA", "BIN"],
@@ -65,8 +53,8 @@ def classify_file( audio_file, all_models ) :
 
     ## Running the models
 
-    n_mfcc = 128 # bucket size !!SUBJECT TO CHANGE!!
-    max_len = 32 # max_len size !!SUBJECT TO CHANGE!!
+    n_mfcc = 118 # bucket size !!SUBJECT TO CHANGE!!
+    max_len = 30 # max_len size !!SUBJECT TO CHANGE!!
     channels = 1 # channels !!SUBJECT TO CHANGE!!
 
     # convert file to wav2mfcc
@@ -120,6 +108,8 @@ def classify_file( audio_file, all_models ) :
                     max_value_index = index
                     max_value = predicted[0,index]
 
+            if(max_value == 1) : max_value = .99
+            if(max_value < .1) : max_value = .1
             max_value_perc = int(max_value * 100)
 
             # Output the prediction
@@ -130,6 +120,7 @@ def classify_file( audio_file, all_models ) :
             else:
                 if( PREDICTION_VERBOSE ):
                     print('\n\nGUESS: ', labels[max_value_index])
+
                 classification['data'].append( { "category" : get_category(labels[max_value_index]), "time" : start_sec, "pred" : max_value_perc } )
     if( PREDICTION_VERBOSE ):
         print(classify_dict)

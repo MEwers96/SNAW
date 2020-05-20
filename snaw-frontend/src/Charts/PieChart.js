@@ -1,10 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Cell, Legend, Pie, PieChart, Tooltip,} from 'recharts';
-import {Container} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-
-// TODO:: Dynamically add data to graphs from json request Issue #7
 
 function getTotals(classification_dict) {
     var anthro_total = 0;
@@ -30,15 +27,6 @@ function getTotals(classification_dict) {
     return [anthro_total, bio_total, geo_total, non_total]
 }
 
-var anthro_total = 0;
-var bio_total = 0;
-var geo_total = 0;
-var pie_data = [
-    { name : 'Anthrophony', value : anthro_total },
-    { name : 'Biophony', value : bio_total },
-    { name : 'Geophony', value : geo_total }
-];
-
 const ant_COLORS = ['#0088FE', '#FF8042'];
 const bio_COLORS = ['#00C49F', '#FF8042'];
 const geo_COLORS = ['#FFBB28', '#FF8042'];
@@ -55,26 +43,19 @@ export default class Example extends PureComponent {
       var none_total = totals[3];
       var total_len = this.props.series[0].data.length;
 
-      var pie_data = [
-          { name : 'Anthrophony', value : anthro_total },
-          { name : 'Biophony', value : bio_total },
-          { name : 'Geophony', value : geo_total },
-            { name : 'None', value : none_total }
-          ];
-
       var ant_pie_data = [
-          { name : 'Anthrophony', value : anthro_total },
-          { name : 'None', value : total_len - anthro_total }
+          { name : 'Anthrophony (seconds)', value : anthro_total },
+          { name : 'None (seconds)', value : total_len - anthro_total }
       ];
 
       var bio_pie_data = [
-          { name : 'Biophony', value : bio_total },
-          { name : 'None', value : total_len - bio_total }
+          { name : 'Biophony (seconds)', value : bio_total },
+          { name : 'None (seconds)', value : total_len - bio_total }
       ];
 
       var geo_pie_data = [
-          { name : 'Geophony', value : geo_total },
-          { name : 'None', value : total_len - geo_total }
+          { name : 'Geophony (seconds)', value : geo_total },
+          { name : 'None (seconds)', value : total_len - geo_total }
       ];
 
     return (

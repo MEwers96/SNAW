@@ -1,18 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Route, BrowserRouter as Router } from 'react-router-dom';
+import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import Results from './Results';
 import Information from "./Information";
+import NotFound from "./NotFound";
 import * as serviceWorker from './serviceWorker';
 
 const routing = (
     <Router>
       <div>
-        <Route exact path="/" component={App} />
-        <Route exact path="/results" component={Results} />
-        <Route exact path="/information" component={Information} />
+        <Switch>
+          <Route exact path="/" component={App} />
+          <Route exact path="/results" component={Results} />
+          <Route exact path="/information" component={Information} />
+          <Route component={NotFound} />
+        </Switch>
       </div>
     </Router>
   )

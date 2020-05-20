@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -6,15 +6,13 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Container from '@material-ui/core/Container';
-import CardMedia from '@material-ui/core/CardMedia';
 import Paper from '@material-ui/core/Paper';
-import LineChart from './Charts/LineChart';
 import PieChart from './Charts/PieChart';
 import Spectrogram from "./components/Spectrogram";
 import ClassificationTable from "./components/ClassificationTable";
 import AcousticIndiceTable from "./components/AcousticIndiceTable";
 import ApplicationBar from "./components/ApplicationBar";
-import Grid from '@material-ui/core/Grid';
+import Footer from "./components/Footer";
 import $ from 'jquery';
 import Button from "@material-ui/core/Button";
 import 'react-h5-audio-player/lib/styles.css';
@@ -22,7 +20,6 @@ import {createArrayCsvStringifier, createArrayCsvWriter} from "csv-writer";
 import {createMuiTheme, ListItemText} from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 
-//Surely a better way to do this other than global variable.
 /* This is currently done to ensure that the panels are accessible after
  * the analysis completes. Without it, all the panels disappear after
  * clicking on one of them.
@@ -111,7 +108,6 @@ function fileInserted(){
         type: "GET",
         async: false,
         success: function(response){
-            console.log(response);
             result = response;
         },
         error: function(error){
@@ -218,7 +214,6 @@ function runAnalysis() {
             //resultDictionary[i].push(classification);
         //    resultDictionary[i].push(indices[i])
         //}
-        console.log(analysis_results);
         return analysis_results;
 }
 
@@ -286,12 +281,12 @@ function Results() {
                                     <Container>
                                         <Paper>
                                             <Typography>
+                                                <br/>
                                                 <h3>It seems something went wrong with this file! Here's what we ran into:</h3>
                                                 <ListItemText>
                                                 {listOfProblems.map(item => <p><h4>{item}</h4></p>)}
                                                 </ListItemText>
                                                 <br/>
-                                                <h3>If this problem persists, please contact [support@example.com]</h3>
                                             </Typography>
                                         </Paper>
                                     </Container>
@@ -323,8 +318,11 @@ function Results() {
                                     <audio controls src={value[fileAudio]}/>
                                     <br/>
                                     <br/>
-                                    <Typography variant='subtitle1'>Results from the Anthrophony, Geophony and Biophony Classification
-                                        Models</Typography>
+                                    <Typography variant='subtitle1'>
+                                        <b>Results from the Anthrophony, Geophony and Biophony Classification Models</b>
+                                        <br/>
+                                        (Each pie chart displays the total number of seconds that each category occured in the file)
+                                    </Typography>
                                     <br/>
                                     <Paper><PieChart series={value[fileData]}/></Paper>
                                     <br/>
@@ -346,7 +344,7 @@ function Results() {
                                     <Paper>
                                         <Button onClick={function () {
                                             downloadCSVFile(key)
-                                        }} variant="contained" className={classes.button}>Export Neural Network Classification</Button>
+                                        }} variant="contained" className={classes.button}>Export Classification</Button>
                                     </Paper>
                                 </Container>
                             </ExpansionPanelDetails>
@@ -354,13 +352,7 @@ function Results() {
                         )}})}
             </Container>
             </body>
-            <footer>
-                <Container>
-                    <br/>
-                     <Typography variant='subtitle1' style={{marginLeft: 'auto', marginRight: 'auto', marginTop: '50px'}}>Created by NAU Capstone Team IntelliChirp · <a href="https://www.ceias.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/">Visit project website</a> · <a href="https://soundscapes2landscapes.org/">Visit our sponsor</a></Typography>
-                    <br/>
-                </Container>
-            </footer>
+            <Footer />
         </div>
             )
         }

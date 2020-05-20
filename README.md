@@ -5,12 +5,6 @@
 
 [Team Website](https://www.cefns.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/)
 
-##### Workflow
-1. Upload a file
-2. Click analyze
-3. View visualized results
-4. Export results to a .csv
-
 ## Description
 
 ### Problem
@@ -21,6 +15,74 @@ Our clients are working with [Soundscapes2Landscapes](https://soundscapes2landsc
 ### Solution
 
 Our envisioned solution is a user friendly web application for use by any researcher or citizen scientist. This application is called the Soundscape Noise Analysis Workbench (S.N.A.W.), and will allow users to analyze sound files with the power of machine learning. The results given to the users include a summary of the audio components in the file, acoustic indices, and an export of the sound file with background noise masked out. Users will gain a better understanding of how various sources of noise in soundscape recordings diminish the ability to detect individual bird species and quantify avian diversity. Using machine learning, instead of the current manual identification process, will drastically speed up the identification of terabytes of acoustic data. This solution will allow users anywhere, anytime, to upload their soundscapes for noise analysis, quickly.
+
+## Installation
+
+Install Python (version 3.7.4) from: 
+https://www.python.org/downloads/release/python-374/2.
+
+Make sure Pip is up-to-date. Run command: 
+~~~~
+py -m pip install --upgrade pip
+~~~~
+
+Navigate to the directory where you would like to install the virtual environment. Run command:
+~~~~
+py -m venv snaw 
+~~~~
+(change ‘snaw’ to what you would like to name the virtual environment).
+
+Activate the environment by navigating to the file directory of your environment and running command 
+~~~~
+.\Scripts\activate
+~~~~
+
+Verify that the virtual environment is running by looking on the left hand side of the bottom line. You should see the name of your virtual environment in parenthesis (Ex:(snaw) C:\......)7. Visit SNAW’s ‘Installation_Requirements’ repository at: https://github.com/intelliChirp/Installation_Requirements . 
+
+Click the green ‘Clone or download’ button. 
+
+Click on ‘Download ZIP’. 
+
+Copy requirements.txt file to your virtual environment directory. 
+
+Navigate to your virtual environment’s directory. Type the command: 
+~~~~
+pip install -r requirements.txt
+~~~~
+Wait for the packages to install on your local machine
+
+## Running Locally
+
+Click on the green ‘Clone or download’ button.
+
+With a terminal open, navigate to the file directory of your Python virtual environment. 
+
+Activate the virtual environment by running 
+~~~~
+\Scripts\activate
+~~~~
+Navigate to the web application’s repository on your local machine.
+
+Navigate to /SNAW/snaw-frontend
+
+Type the commands:
+~~~~
+npm install
+npm run build
+~~~~
+This will install all needed packages for this application.
+
+Navigate to the file directory /SNAW/snaw-backend
+
+Type the command 
+~~~~
+py api.py
+~~~~
+This will start the server on your machine. The last line printed to the terminal should show:‘Running on [URL-PATH] (Press CTRL+C to quit)’
+
+Open a web browser, and paste the URL path into a browsers address bar.
+
+You should now be at the homepage of SNAW
 
 ## Technology Demo
 

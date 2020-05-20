@@ -119,8 +119,9 @@ def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
             # get prediction value from label, divide by 100 to get percent,
             #   multiply by negative and add .33 to get reasonable opacity level
             alpha_val = int(cat[-3:-1]) / 100 * -1 + .5
-            print(alpha_val)
-            print(int(cat[-3:-1]))
+            if( DEBUG_FLAG ):
+                print(alpha_val)
+                print(int(cat[-3:-1]))
             plt.fill([x,x+x_size,x+x_size,x], [0,0,freqbins,freqbins], 'r', alpha=alpha_val)
             plt.text(x+5, 5, cat[-3:], rotation=90, color="white")
             plt.text(x+5, 40, cat[:-4], rotation=90, color="white")

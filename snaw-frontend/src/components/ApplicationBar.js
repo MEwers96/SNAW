@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         pageTitle: {
             flexGrow: 1,
+            textAlign: 'center',
         },
     }),
 );
@@ -56,7 +57,7 @@ const styles = {
 
     title: {
         flexGrow: 1,
-    }
+    },
 }
 
 /* Creates a static Application bar to be featured on the top of each page in the website */

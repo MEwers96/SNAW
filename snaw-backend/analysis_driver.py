@@ -1,10 +1,4 @@
 from keras.models import load_model
-import keras
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D, LSTM, Activation
-from keras.utils import to_categorical
-import wandb
-from wandb.keras import WandbCallback
 import matplotlib.pyplot as plt
 import sklearn.metrics as metrics
 import librosa
@@ -16,7 +10,12 @@ from classification_cnn import runScript as run_classification
 from get_spectrogram import runScript as run_spectrogram
 from acousticIndices import getAcousticIndices as run_indices
 
-DEBUG_FLAG = True
+DEBUG_FLAG = False
+
+# Path to each CNN model (Example format: 'model\\anthro\\model.h5)
+ANTHRO_CNN_MODEL = 'model\\anthro\\ant_cnn_model.h5'
+BIO_CNN_MODEL = 'model\\bio\\bio_cnn_model.h5'
+GEO_CNN_MODEL = 'model\\geo\\geo_cnn_model.h5'
 
 def run_driver(personalID) :
     if DEBUG_FLAG : print("[WORKING] Attempting to run analysis driver - analysis_driver.py")
@@ -27,9 +26,9 @@ def run_driver(personalID) :
     fileCount = 0
 
     if DEBUG_FLAG : print("[WORKING] Loading CNN Models..")
-    all_models = [ load_model('model\\anthro\\ant_cnn_model.h5'),
-                   load_model('model\\bio\\bio_cnn_model.h5'),
-                   load_model('model\\geo\\geo_cnn_model.h5') ]
+    all_models = [ load_model(ANTHRO_CNN_MODEL),
+                   load_model(BIO_CNN_MODEL),
+                   load_model(GEO_CNN_MODEL) ]
     if DEBUG_FLAG : print("[SUCCESS] Loaded CNN Models..")
 
     try:

@@ -26,18 +26,6 @@ function createData(class_name, seconds, percentage) {
   return { class_name, seconds, percentage };
 }
 
-// START OF MOCK DATA
-const rows = [
-  createData('Geophony', 14, 45),
-  createData('Biophony', 12, 45),
-  createData('Anthrophony', 4, 10),
-];
-
-const rows2 = [
-  {"class_name" : "Geophony", "seconds" : 14, "percentage" : 45}
-];
-// END OF MOCK DATA
-
 function getTotals(classification_dict) {
   var anthro_total = 0;
   var bio_total = 0;
@@ -73,10 +61,6 @@ function getTotalSecs(classification_dict) {
 export default function ClassificationTable(props) {
   const classes = useStyles();
 
-  //var anthro_total = getTotals( props.series[0].data ); // Total number of ant classes with non NO categ
-  //var bio_total = getTotals( props.series[1].data ); // Total number of bio classes with non NO categ
-  //var geo_total = getTotals( props.series[2].data ); // Total number of geo classes with non No categ
-
   // eslint-disable-next-line no-undef
   var totals = getTotals( props.series );
   var anthro_total = totals[0];
@@ -84,7 +68,8 @@ export default function ClassificationTable(props) {
   var geo_total = totals[2];
   var none_total = totals[3];
 
-  var total_secs = getTotalSecs( props.series[0].data ); // Total number of seconds the audio file is
+  // Total number of seconds the audio file is
+  var total_secs = getTotalSecs( props.series[0].data );
 
   // adding data to the table
   var table_data = [
@@ -94,8 +79,6 @@ export default function ClassificationTable(props) {
       percent : (Math.floor((bio_total / total_secs)*100)).toString() + "%" },
     { name : 'Geophony', value : geo_total.toString() + "s",
       percent : (Math.floor((geo_total / total_secs)*100)).toString() + "%" },
-    { name: 'None', value : none_total.toString() + "s",
-      percent : (Math.floor((none_total / total_secs)*100)).toString() + "%"}
   ];
 
   return (
